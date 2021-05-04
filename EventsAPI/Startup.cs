@@ -1,4 +1,5 @@
 using EventsAPI.Data;
+using EventsAPI.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -11,6 +12,7 @@ using Microsoft.OpenApi.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace EventsAPI
@@ -27,8 +29,13 @@ namespace EventsAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddHttpClient<ILookupEmployees, HttpLookupEmployees>();
+            services.AddControllers().AddJsonOptions(options =>
+            {
+                options.JsonSerializerOptions.IgnoreNullValues = true;
+                options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+            });
 
-            services.AddControllers();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "EventsAPI", Version = "v1" });
@@ -38,6 +45,8 @@ namespace EventsAPI
             {
                 options.UseSqlServer(Configuration.GetConnectionString("events"));
             });
+
+            services.Configure<ApiOptions>(Configuration.GetSection(ApiOptions.Section));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
