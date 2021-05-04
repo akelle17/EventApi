@@ -46,7 +46,10 @@ namespace EventsAPI
                 options.UseSqlServer(Configuration.GetConnectionString("events"));
             });
 
+            services.AddSingleton<EventRegistrationChannel>();
             services.Configure<ApiOptions>(Configuration.GetSection(ApiOptions.Section));
+
+            services.AddHostedService<BackgroundRegistrationWorker>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

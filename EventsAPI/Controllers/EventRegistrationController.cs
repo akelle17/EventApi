@@ -1,4 +1,5 @@
 ﻿using EventsAPI.Data;
+using EventsAPI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -11,10 +12,12 @@ namespace EventsAPI.Controllers
     public class EventRegistrationController : ControllerBase
     {
         private readonly EventsDataContext _context;
+        private readonly EventRegistrationChannel _channel;
 
-        public EventRegistrationController(EventsDataContext context)
+        public EventRegistrationController(EventsDataContext context, EventRegistrationChannel channel)
         {
             _context = context;
+            _channel = channel;
         }
 
         [HttpPost("events/{eventId:int}/registrations")]
@@ -37,7 +40,9 @@ namespace EventsAPI.Controllers
 
             savedEvent.Registrations.Add(registration);
             await _context.SaveChangesAsync();
-            
+
+            var worked = await _channel.AddRegistration(new EventRegistrationChannelRequest(registration.Id));
+
             return CreatedAtRoute("get-event-registration",
                 new { eventId = savedEvent.Id, registrationId = registration.Id },
                 registration);
