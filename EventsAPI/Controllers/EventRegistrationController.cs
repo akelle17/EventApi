@@ -64,29 +64,29 @@ namespace EventsAPI.Controllers
         {
             return Ok();
         }
+    }
 
-        public record PostReservationRequest
-        {
-            public int Id { get; init; }
+    public record PostReservationRequest
+    {
+        public int Id { get; init; }
 
-            public string FirstName { get; init; }
-            public string LastName { get; init; }
+        public string FirstName { get; init; }
+        public string LastName { get; init; }
 
-            public string Email { get; init; }
-            public string Phone { get; init; }
-        }
+        public string Email { get; init; }
+        public string Phone { get; init; }
+    }
 
-        public record GetReservationResponse
-        {
-            public int Id { get; init; }
-            public int EmployeeId { get; set; }
-            public string FirstName { get; init; }
-            public string LastName { get; init; }
+    public record GetReservationResponse
+    {
+        public int Id { get; init; }
+        public int EmployeeId { get; set; }
+        public string FirstName { get; init; }
+        public string LastName { get; init; }
 
-            public string Email { get; init; }
-            public string Phone { get; init; }
-            public EventRegistration Status { get; set; }
-            public string DeniedReason { get; set; }
-        }
+        public string Email { get; init; }
+        public string Phone { get; init; }
+        public EventRegistration Status { get; set; }
+        public string DeniedReason { get; set; }
     }
 }
